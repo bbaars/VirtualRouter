@@ -25,27 +25,27 @@ int main(){
       printf("Interface: %s\n",tmp->ifa_name);
       //create a packet socket on interface r?-eth1
       if(!strncmp(&(tmp->ifa_name[3]),"eth1",4)){
-	printf("Creating Socket on interface %s\n",tmp->ifa_name);
-	//create a packet socket
-	//AF_PACKET makes it a packet socket
-	//SOCK_RAW makes it so we get the entire packet
-	//could also use SOCK_DGRAM to cut off link layer header
-	//ETH_P_ALL indicates we want all (upper layer) protocols
-	//we could specify just a specific one
-	packet_socket = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL));
-	if(packet_socket<0){
-	  perror("socket");
-	  return 2;
-	}
-	//Bind the socket to the address, so we only get packets
-	//recieved on this specific interface. For packet sockets, the
-	//address structure is a struct sockaddr_ll (see the man page
-	//for "packet"), but of course bind takes a struct sockaddr.
-	//Here, we can use the sockaddr we got from getifaddrs (which
-	//we could convert to sockaddr_ll if we needed to)
-	if(bind(packet_socket,tmp->ifa_addr,sizeof(struct sockaddr_ll))==-1){
-	  perror("bind");
-	}
+        printf("Creating Socket on interface %s\n",tmp->ifa_name);
+        //create a packet socket
+        //AF_PACKET makes it a packet socket
+        //SOCK_RAW makes it so we get the entire packet
+        //could also use SOCK_DGRAM to cut off link layer header
+        //ETH_P_ALL indicates we want all (upper layer) protocols
+        //we could specify just a specific one
+        packet_socket = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL));
+        if(packet_socket<0){
+          perror("socket");
+          return 2;
+        }
+        //Bind the socket to the address, so we only get packets
+        //recieved on this specific interface. For packet sockets, the
+        //address structure is a struct sockaddr_ll (see the man page
+        //for "packet"), but of course bind takes a struct sockaddr.
+        //Here, we can use the sockaddr we got from getifaddrs (which
+        //we could convert to sockaddr_ll if we needed to)
+        if(bind(packet_socket,tmp->ifa_addr,sizeof(struct sockaddr_ll))==-1){
+          perror("bind");
+        }
       }
     }
   }
@@ -71,7 +71,7 @@ int main(){
     //by the OS automatically, for example ICMP port unreachable
     //messages, so we will just ignore them here)
     if(recvaddr.sll_pkttype==PACKET_OUTGOING)
-      continue;
+    continue;
     //start processing all others
     printf("Got a %d byte packet\n", n);
 
